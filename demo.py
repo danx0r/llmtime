@@ -107,12 +107,11 @@ model_names = list(model_predict_fns.keys())
 
 # In[3]:
 
-
 datasets = get_datasets()
 ds_name = 'AirPassengersDataset'
-
 data = datasets[ds_name]
 train, test = data # or change to your own data
+
 out = {}
 for model in model_names: # GPT-4 takes a about a minute to run
     model_hypers[model].update({'dataset_name': ds_name}) # for promptcast
