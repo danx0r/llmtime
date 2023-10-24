@@ -19,6 +19,9 @@ from models.darts import get_arima_predictions_data
 from models.llmtime import get_llmtime_predictions_data
 from data.small_context import get_datasets
 from models.validation_likelihood_tuning import get_autotuned_predictions_data
+import pandas
+from dateutil import parser
+duparse = parser.parse
 
 #get_ipython().run_line_magic('load_ext', 'autoreload')
 #get_ipython().run_line_magic('autoreload', '2')
@@ -27,8 +30,8 @@ def plot_preds(train, test, pred_dict, model_name, show_samples=False):
     pred = pred_dict['median']
     pred = pd.Series(pred, index=test.index)
     plt.figure(figsize=(8, 6), dpi=100)
-    plt.plot(train)
-    plt.plot(test, label='Truth', color='black')
+    plt.plot(train, marker='*')
+    plt.plot(test, label='Truth', color='black', marker='*')
     plt.plot(pred, label=model_name, color='purple')
     # shade 90% confidence interval
     samples = pred_dict['samples']
@@ -40,7 +43,7 @@ def plot_preds(train, test, pred_dict, model_name, show_samples=False):
         # convert df to numpy array
         samples = samples.values if isinstance(samples, pd.DataFrame) else samples
         for i in range(min(10, samples.shape[0])):
-            plt.plot(pred.index, samples[i], color='purple', alpha=0.3, linewidth=1)
+            plt.plot(pred.index, samples[i], color='purple', alpha=0.3, linewidth=1, marker='.')
     plt.legend(loc='upper left')
     if 'NLL/D' in pred_dict:
         nll = pred_dict['NLL/D']
@@ -95,7 +98,7 @@ model_hypers = {
 
 model_predict_fns = {
     'LLMTime GPT-3': get_llmtime_predictions_data,
-    'LLMTime GPT-4': get_llmtime_predictions_data,
+#    'LLMTime GPT-4': get_llmtime_predictions_data,
 #    'PromptCast GPT-3': get_promptcast_predictions_data,
 #    'ARIMA': get_arima_predictions_data,
 }
@@ -107,10 +110,40 @@ model_names = list(model_predict_fns.keys())
 
 # In[3]:
 
+# ds_name = 'WineDataset'
+ds_name = "datasets/Nasdaq5yr_dataset.csv"
 datasets = get_datasets()
-ds_name = 'AirPassengersDataset'
-data = datasets[ds_name]
-train, test = data # or change to your own data
+print ("AVAILABLE DATASETS:", datasets.keys())
+if ds_name in datasets:
+    train, test = datasets[ds_name]
+else:
+    pdata = []
+    pindex = []
+    f = open(ds_name)
+    header = f.readline().strip().split(",")
+    print ("HEADER:", header)
+    for row in f.readlines():
+        row = row.strip().split(",")
+        print ("ROW:", row)
+        if header[0]=='date':
+            ix = duparse(row[0])
+        else:
+            ix = int(row[0])
+        if header[1]=='float':
+            dat = float(row[1])
+        elif header[1]=='int':
+            dat = int(row[1])
+        else:
+            dat = row[1]
+        pdata.append(dat)
+        pindex.append(ix)
+    f.close()
+    pdata.reverse()
+    pindex.reverse()
+    train = pandas.core.series.Series(pdata[:-10], pindex[:-10])
+    test = pandas.core.series.Series(pdata[-10:], pindex[-10:])
+
+print (f"train: {len(train)} test: {len(test)}")
 
 out = {}
 for model in model_names: # GPT-4 takes a about a minute to run
@@ -119,7 +152,7 @@ for model in model_names: # GPT-4 takes a about a minute to run
     num_samples = 10
     pred_dict = get_autotuned_predictions_data(train, test, hypers, num_samples, model_predict_fns[model], verbose=False, parallel=False)
     out[model] = pred_dict
-    plot_preds(train, test, pred_dict, model, show_samples=True)
+    plot_preds(train[-20:], test, pred_dict, model, show_samples=True)
 
 
 # In[ ]:
