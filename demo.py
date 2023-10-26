@@ -32,18 +32,18 @@ def plot_preds(train, test, pred_dict, model_name, show_samples=False):
     plt.figure(figsize=(8, 6), dpi=100)
     plt.plot(train, marker='*')
     plt.plot(test, label='Truth', color='black', marker='*')
-    plt.plot(pred, label=model_name, color='purple')
+    plt.plot(pred, label=model_name, color='purple', marker='.')
     # shade 90% confidence interval
     samples = pred_dict['samples']
     lower = np.quantile(samples, 0.05, axis=0)
     upper = np.quantile(samples, 0.95, axis=0)
-    plt.fill_between(pred.index, lower, upper, alpha=0.3, color='purple')
+    plt.fill_between(pred.index, lower, upper, alpha=0.1, color='purple')
     if show_samples:
         samples = pred_dict['samples']
         # convert df to numpy array
         samples = samples.values if isinstance(samples, pd.DataFrame) else samples
         for i in range(min(10, samples.shape[0])):
-            plt.plot(pred.index, samples[i], color='purple', alpha=0.3, linewidth=1, marker='.')
+            plt.plot(pred.index, samples[i], color='purple', alpha=0.3, linewidth=1)
     plt.legend(loc='upper left')
     if 'NLL/D' in pred_dict:
         nll = pred_dict['NLL/D']
@@ -110,8 +110,8 @@ model_names = list(model_predict_fns.keys())
 
 # In[3]:
 
-# ds_name = 'WineDataset'
-ds_name = "datasets/Nasdaq5yr_dataset.csv"
+ds_name = 'WineDataset'
+# ds_name = "datasets/Nasdaq5yr_dataset.csv"
 datasets = get_datasets()
 print ("AVAILABLE DATASETS:", datasets.keys())
 if ds_name in datasets:
@@ -152,7 +152,7 @@ for model in model_names: # GPT-4 takes a about a minute to run
     num_samples = 10
     pred_dict = get_autotuned_predictions_data(train, test, hypers, num_samples, model_predict_fns[model], verbose=False, parallel=False)
     out[model] = pred_dict
-    plot_preds(train[-20:], test, pred_dict, model, show_samples=True)
+    plot_preds(train[-50:], test, pred_dict, model, show_samples=False)
 
 
 # In[ ]:
