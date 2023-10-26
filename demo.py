@@ -110,13 +110,13 @@ model_names = list(model_predict_fns.keys())
 
 # In[3]:
 
-ds_name = 'WineDataset'
+ds_name = 'AirPassengersDataset'
 # ds_name = "datasets/Nasdaq5yr_dataset.csv"
 datasets = get_datasets()
 print ("AVAILABLE DATASETS:", datasets.keys())
 if ds_name in datasets:
     train, test = datasets[ds_name]
-else:
+elif ds_name in ("datasets/Nasdaq5yr_dataset.csv",):
     pdata = []
     pindex = []
     f = open(ds_name)
@@ -142,6 +142,8 @@ else:
     pindex.reverse()
     train = pandas.core.series.Series(pdata[:-10], pindex[:-10])
     test = pandas.core.series.Series(pdata[-10:], pindex[-10:])
+else:
+    pass
 
 print (f"train: {len(train)} test: {len(test)}")
 
