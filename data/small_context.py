@@ -95,6 +95,7 @@ def get_memorization_datasets(n=-1,testfrac=0.15, predict_steps=30):
         'TSMCStock',
         # 'TurkeyPower'
         'NasDaq2019',
+        'NasDaq2020',
     ]
     datas = []
     for i,dsname in enumerate(datasets):

@@ -111,8 +111,8 @@ model_names = list(model_predict_fns.keys())
 # In[3]:
 
 # ds_name = 'AirPassengersDataset'
-ds_name = 'TSMCStock'
-# ds_name = 'NasDaq2019'
+# ds_name = 'TSMCStock'
+ds_name = 'NasDaq2020'
 # ds_name = "datasets/Nasdaq5yr_dataset.csv"
 datasets = get_memorization_datasets()
 print ("AVAILABLE DATASETS:", datasets.keys())
