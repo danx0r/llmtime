@@ -111,7 +111,8 @@ model_names = list(model_predict_fns.keys())
 # In[3]:
 
 # ds_name = 'AirPassengersDataset'
-ds_name = 'TSMCStock'
+# ds_name = 'TSMCStock'
+ds_name = 'NasDaq2019'
 # ds_name = "datasets/Nasdaq5yr_dataset.csv"
 datasets = get_memorization_datasets()
 print ("AVAILABLE DATASETS:", datasets.keys())
@@ -155,7 +156,7 @@ for model in model_names: # GPT-4 takes a about a minute to run
     num_samples = 10
     pred_dict = get_autotuned_predictions_data(train, test, hypers, num_samples, model_predict_fns[model], verbose=False, parallel=False)
     out[model] = pred_dict
-    plot_preds(train[-50:], test, pred_dict, model, show_samples=False)
+    plot_preds(train, test, pred_dict, model, show_samples=False)
 
 
 # In[ ]:

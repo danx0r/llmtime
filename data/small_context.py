@@ -33,7 +33,7 @@ def get_descriptions(w_references=False):
     descriptions = []
     for dsname in dataset_names:
         d = getattr(darts.datasets,dsname)().__doc__
-        
+
         if w_references:
             descriptions.append(d)
             continue
@@ -47,7 +47,7 @@ def get_descriptions(w_references=False):
             if l.strip().startswith("Obtained"):
                 break
             lines.append(l)
-        
+
         d = " ".join([x.strip() for x in lines]).strip()
 
         descriptions.append(d)
@@ -94,6 +94,7 @@ def get_memorization_datasets(n=-1,testfrac=0.15, predict_steps=30):
         # 'IstanbulTraffic',
         'TSMCStock',
         # 'TurkeyPower'
+        'NasDaq2019',
     ]
     datas = []
     for i,dsname in enumerate(datasets):
