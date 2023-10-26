@@ -17,7 +17,7 @@ from models.utils import grid_iter
 from models.promptcast import get_promptcast_predictions_data
 from models.darts import get_arima_predictions_data
 from models.llmtime import get_llmtime_predictions_data
-from data.small_context import get_datasets
+from data.small_context import get_datasets, get_memorization_datasets
 from models.validation_likelihood_tuning import get_autotuned_predictions_data
 import pandas
 from dateutil import parser
@@ -110,9 +110,10 @@ model_names = list(model_predict_fns.keys())
 
 # In[3]:
 
-ds_name = 'AirPassengersDataset'
+# ds_name = 'AirPassengersDataset'
+ds_name = 'TSMCStock'
 # ds_name = "datasets/Nasdaq5yr_dataset.csv"
-datasets = get_datasets()
+datasets = get_memorization_datasets()
 print ("AVAILABLE DATASETS:", datasets.keys())
 if ds_name in datasets:
     train, test = datasets[ds_name]
