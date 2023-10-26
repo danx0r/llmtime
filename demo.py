@@ -124,7 +124,7 @@ else:
     print ("HEADER:", header)
     for row in f.readlines():
         row = row.strip().split(",")
-        print ("ROW:", row)
+        # print ("ROW:", row)
         if header[0]=='date':
             ix = duparse(row[0])
         else:
