@@ -78,7 +78,7 @@ for dsname,data in datasets.items():
     else:
         out_dict = {}
     
-    for model in ['text-davinci-003', 'gp', 'arima', 'N-HiTS']:
+    for model in ['text-davinci-003']: #, 'gp', 'arima', 'N-HiTS']:
         if model in out_dict and not is_gpt(model):
             if out_dict[model]['samples'] is not None:
                 print(f"Skipping {dsname} {model}")

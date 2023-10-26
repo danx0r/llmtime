@@ -91,9 +91,9 @@ def get_datasets(n=-1,testfrac=0.2):
 
 def get_memorization_datasets(n=-1,testfrac=0.15, predict_steps=30):
     datasets = [
-        'IstanbulTraffic',
+        # 'IstanbulTraffic',
         'TSMCStock',
-        'TurkeyPower'
+        # 'TurkeyPower'
     ]
     datas = []
     for i,dsname in enumerate(datasets):
